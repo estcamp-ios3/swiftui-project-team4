@@ -14,7 +14,7 @@ struct LoginView: View {
     
     var body: some View {
         if isLoggedIn {
-            // 로그인 성공시 ContentView로 전환
+            // 로그인 성공시 ContentView로 이동
             ContentView()
         } else {
             ZStack {
@@ -33,16 +33,15 @@ struct LoginView: View {
                     Spacer()
                     Spacer()
                     
-                    // 앱 로고 또는 타이틀
+                    // 제목
                     Text("국내 야구 퀴즈 모음")
-                        .font(.system(size: 35))
-                        .fontWeight(.bold)
+                        .font(.system(size: 35, weight: .bold, design: .default ))
                         .foregroundColor(.white)
                     
-                    Spacer()
+                    Spacer() // 로그인 버튼과 간격 조절
                     
                     // 로그인 버튼들을 담은 VStack
-                    VStack(spacing: 12) {
+                    VStack(spacing: 12) { // 각 버튼 간격
                         // 애플 로그인 버튼
                         Button(action: {
                             // 애플 로그인 처리
@@ -112,10 +111,10 @@ struct LoginView: View {
                                 Text("비회원 로그인")
                                     .font(.system(size: 20))
                             }
-                            .foregroundColor(.black)
+                            .foregroundColor(.black) // 버튼 색상
                             .frame(maxWidth: .infinity)
                             .frame(height: 50)
-                            .background(Color.white)
+                            .background(Color.white) // 버튼 배경 색상
                             .clipShape(Capsule())
                         }
                        
