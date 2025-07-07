@@ -15,7 +15,8 @@ struct LoginView: View {
     var body: some View {
         if isLoggedIn {
             // 로그인 성공시 ContentView로 이동
-            ContentView()
+            TeamListView()
+                .modelContainer(for: KBOLeagueTeam.self, inMemory: true)
         } else {
             ZStack {
                 // 배경 그라데이션 적용
