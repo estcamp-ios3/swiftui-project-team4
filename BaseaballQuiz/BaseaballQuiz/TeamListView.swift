@@ -23,7 +23,7 @@ struct TeamListView: View {
             VStack {
                 List {
                     ForEach(teams) { team in
-                        NavigationLink(destination: TeamDetailView(), label: {
+                        NavigationLink(destination: TeamDetailView(teamID: team.id), label: {
                             Image("\(team.logoImage)")
                                 .resizable()
                                 .frame(width: 70, height: 50)
@@ -58,8 +58,8 @@ struct TeamListView: View {
             }
         }
         .onChange(of: selectedTab) { oldValue, newValue in
-            if newValue == 1 { // '퀴즈풀기' 탭 (value가 1)이 선택되면
-                showQuizView = true // showQuizView를 true로 설정하여 시트를 띄웁니다.
+            if newValue == 1 {
+                showQuizView = true
             }
         }
         // showQuizView 상태가 true일 때 QuizView를 모달 시트로 표시합니다.

@@ -15,7 +15,7 @@ class KBOLeagueTeam {
     public var name: String             // 구단이름 "한화 이글스"
     public var engName: String          // 구단이름 영문명 "Hanhwa Eagles"
     public var location: String         // 연고지 "대전"
-    public var birthday: Date           // 창단일 "
+    public var birthday: String           // 창단일 "
     public var homeStadium: String      // 홈구장
     public var manager: String          // 감독
     public var officialURL: URL         // 구단공식 홈페이지 링크
@@ -29,7 +29,7 @@ class KBOLeagueTeam {
     public var players: [Player]        // 선수정보
     
     
-    init(id: Int, name: String, engName: String, location: String, birthday: Date, homeStadium: String, manager: String, officialURL: URL, color: String, logoImage: String, standings: Int, standingsDesc: String, players: [Player]) {
+    init(id: Int, name: String, engName: String, location: String, birthday: String, homeStadium: String, manager: String, officialURL: URL, color: String, logoImage: String, standings: Int, standingsDesc: String, players: [Player] = []) {
         self.id = id
         self.name = name
         self.engName = engName

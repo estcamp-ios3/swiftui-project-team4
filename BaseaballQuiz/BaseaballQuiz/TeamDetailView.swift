@@ -10,12 +10,15 @@ import SwiftData
 
 
 struct TeamDetailView: View {
-    @Query(sort: \Player.name) var players: [Player]
-    @Environment(\.modelContext) private var context
-//    @Binding var teamID: Int
-    
     @Query(sort: \KBOLeagueTeam.id) var selectedTeamQuery: [KBOLeagueTeam]
+//    @Query(sort: \Player.name) var players: [Player]
+    @Environment(\.modelContext) private var context
+    var teamID: Int
+    var selectedTeam: KBOLeagueTeam? {
+        selectedTeamQuery.filter { $0.id == teamID }.first
+    }
     
+        
 //    init(teamID: Binding<Int>) {
 //        self._teamID = teamID
 //        self._selectedTeamQuery = Query(filter: #Predicate<KBOLeagueTeam> { team in
@@ -25,6 +28,7 @@ struct TeamDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            Text("\(teamID)번 팀")
 //            Text("\(selectedTeamQuery[teamID].name) 팀 상세 정보")
 //                .font(.largeTitle)
 //                .foregroundColor(.purple)
@@ -69,7 +73,7 @@ struct TeamDetailView: View {
         standingsDesc: "30승 1무 40패",
         players: []
     )
-//    TeamDetailView(teamID: $selectedTeam.id)
-    TeamDetailView()
+    TeamDetailView(teamID: $selectedTeam.id)
+//    TeamDetailView(teamID: <#T##Int#>)
         .modelContainer(for: [KBOLeagueTeam.self, Player.self], inMemory: true)
 }
