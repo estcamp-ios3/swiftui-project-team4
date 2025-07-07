@@ -55,11 +55,10 @@ struct QuizView: View {
                 }
             }
         }
-            .padding()
-            .animation(.easeInOut, value: showResult)
-            
-        }
+        .padding()
+        .animation(.easeInOut, value: showResult)
     }
+}
 
 #Preview {
     QuizView()

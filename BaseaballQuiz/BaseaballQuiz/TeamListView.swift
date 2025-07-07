@@ -14,6 +14,8 @@ struct TeamListView: View {
     //  @State var selectedTeamName: String
     @Environment(\.modelContext) private var context
     //@State var teamID: Int = 0
+    @State private var selectedTab: Int = 0 // 선택된 탭을 추적하기 위한 변수
+    @State private var showQuizView: Bool = false // QuizView를 모달로 띄울지 결정하는 변수
     
     
     var body: some View {
@@ -35,37 +37,36 @@ struct TeamListView: View {
                     }
                 }
                 .navigationBarTitle("KBO League", displayMode: .automatic)
-            
                 
-                
-                TabView {
-                    
-                    Tab("구단정보", systemImage: "baseball.fill") {
+                TabView(selection: $selectedTab) {
+                    Tab("구단정보", systemImage: "baseball.fill", value: 0) {
                         // 1-2-1 화면으로 이동
                     }
                     
-                    Tab("퀴즈풀기", systemImage: "figure.baseball") {
-                        // 사용자 시나리오
-                        // 1. 정보를 원하는 선수의 이름을 입력하세요 (검색창)
-                        // 2. 딱히 없다면 검색창 밑에 KBO구단 리스트(10개)에서 구단을 선택한다.
-                        NavigationLink(destination: QuizView()) {
-                            
-                        }
+                    Tab("퀴즈풀기", systemImage: "figure.baseball", value: 1) {
+                        //QuizView()
                     }
                     
-                    Tab("내 정보", systemImage: "person.crop.circle.fill") {
+                    Tab("내 정보", systemImage: "person.crop.circle.fill", value: 2) {
                         // UserInfoView() 사용자 정보 화면으로 이동
                         // 사용자 시나리오
                         // 비회원: 회원가입 화면으로 넘어간다
                         // 회원: 자신의 사용자 정보 화면으로 바로 이동한다
-                        
                     }
                 }
                 .frame(width: 370, height: 50)
-
-                
             }
         }
+        .onChange(of: selectedTab) { oldValue, newValue in
+            if newValue == 1 { // '퀴즈풀기' 탭 (value가 1)이 선택되면
+                showQuizView = true // showQuizView를 true로 설정하여 시트를 띄웁니다.
+            }
+        }
+        // showQuizView 상태가 true일 때 QuizView를 모달 시트로 표시합니다.
+        .sheet(isPresented: $showQuizView) {
+            QuizView()
+        }
+        
         .task {
             context.insert(KBOLeagueTeam(
                 id: 0,
@@ -227,7 +228,6 @@ struct TeamListView: View {
                 
             ))
         }
-        
     }
 }
 
