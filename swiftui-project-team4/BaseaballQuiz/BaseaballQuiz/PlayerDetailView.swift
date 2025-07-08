@@ -183,55 +183,67 @@ struct PlayerDetailView: View {
                             ScrollView(.horizontal) {
                                 HStack {
                                     VStack {
-                                        Text("타율")
+                                        Text("평균자책점")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("홈런")
+                                        Text("승")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("타수")
+                                        Text("패")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("안타")
+                                        Text("이닝")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("타점")
+                                        Text("탈삼진")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("득점")
+                                        Text("피안타")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("도루")
+                                        Text("피홈런")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("출루율")
+                                        Text("볼넷")
                                             .kerning(2)
                                         
                                         Text("0")
                                     }
                                     VStack {
-                                        Text("OPS")
+                                        Text("WHIP")
+                                            .kerning(2)
+                                        
+                                        Text("0")
+                                    }
+                                    VStack {
+                                        Text("세이브")
+                                            .kerning(2)
+                                        
+                                        Text("0")
+                                    }
+                                    VStack {
+                                        Text("완봉승")
                                             .kerning(2)
                                         
                                         Text("0")
