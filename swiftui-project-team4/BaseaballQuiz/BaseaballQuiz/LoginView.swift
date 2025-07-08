@@ -2,8 +2,10 @@ import SwiftUI
 import AuthenticationServices
 
 struct LoginView: View {
-    // 로그인 상태를 관리하는 상태 변수
     @State private var isLoggedIn = false
+    @State private var showQuiz = false
+    @State private var rotation: Double = 0  // 야구공 회전
+    @State private var swingAngle: Double = 0  // 타자 회전
     
     // 배경 그라데이션 색상 정의
     private let backgroundGradient = LinearGradient(
@@ -13,7 +15,9 @@ struct LoginView: View {
     )
     
     var body: some View {
-        if isLoggedIn {
+        if showQuiz {
+            QuizView()
+        } else if isLoggedIn {
             TeamListView()
                 .modelContainer(for: KBOLeagueTeam.self, inMemory: true)
         } else {
@@ -26,7 +30,7 @@ struct LoginView: View {
                 Image("KimSeoHyeon")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .opacity(0.2) // (반투명) 밝기 조절
+                    .opacity(0.10) // (반투명) 밝기 조절
                     .ignoresSafeArea()
                 
                 VStack {
@@ -34,11 +38,44 @@ struct LoginView: View {
                     Spacer()
                     
                     // 제목
-                    Text("국내 야구 퀴즈 모음")
-                        .font(.system(size: 35, weight: .bold, design: .default ))
+                    Text("Hi, KBO Quiz")
+                        .font(.system(size: 40, weight: .bold, design: .rounded ))
                         .foregroundColor(.white)
                     
                     Spacer() // 로그인 버튼과 간격 조절
+                    // 퀴즈 풀기
+                    Button(action: {
+                        showQuiz = true
+                    })
+                    {
+                        HStack {
+                            Image("타자2")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .rotation3DEffect(
+                                    .degrees(swingAngle),
+                                    axis: (x: 0.0, y: 1.0, z: 0.0)  
+                                )
+                                .onAppear {
+                                    withAnimation(
+                                        Animation.linear(duration: 3)
+                                        .repeatForever(autoreverses: false)
+                                    ) {
+                                        swingAngle = 360
+                                    }
+                                }
+                            Text("Quiz 시작하기 !")
+                                .font(.system(size: 40, weight: .medium))
+                                
+                        }
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 100)
+                        .background(Color.white)
+                        .clipShape(Capsule())
+                        .padding(.horizontal, 120)
+                     
+                    }
                     
                     // 로그인 버튼들을 담은 VStack
                     VStack(spacing: 12) { // 각 버튼 간격
@@ -48,97 +85,31 @@ struct LoginView: View {
                             isLoggedIn = true
                         }) {
                             HStack {
-                                Image(systemName: "apple.logo")
-                                    .imageScale(.medium)
-                                Text("Apple 로 로그인 하기")
-                                    .font(.system(size: 20))
-                            }
-                            // .clipShape(Capsule())
-                           // 버튼 UI 둥근 모양으로 처리
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.white)
-                            .clipShape(Capsule())
-                           
-                            
-                        }
-                        
-                        // 구글 로그인 버튼
-                        Button(action: {
-                            // 구글 로그인 처리
-                            isLoggedIn = true
-                        }) {
-                            HStack {
-                                Image(systemName: "g.circle.fill")
-                                    .imageScale(.medium)
-                                Text("Google 로 로그인 하기")
-                                    .font(.system(size: 20))
+                                Image("야구공")
+                                    .resizable()
+                                    .frame(width: 60, height: 60)
+                                    .rotationEffect(.degrees(rotation))
+                                    .onAppear {
+                                        withAnimation(
+                                            Animation.linear(duration: 3)
+                                            .repeatForever(autoreverses: false)
+                                        ) {
+                                            rotation = 360
+                                        }
+                                    }
+                                Text(" 정보 먼저보기 !")
+                                    .font(.system(size: 40, weight: .medium, design: .rounded))
                             }
                             .foregroundColor(.black)
                             .frame(maxWidth: .infinity)
-                            .frame(height: 50)
+                            .frame(height: 100)
                             .background(Color.white)
                             .clipShape(Capsule())
+                            .padding(.top)
+                            .padding(.horizontal, 120)
                         }
-                        
-                        // 이메일 로그인 버튼
-                        Button(action: {
-                            // 이메일 로그인 처리
-                            isLoggedIn = true
-                        }) {
-                            HStack {
-                                Image(systemName: "envelope.fill")
-                                    .imageScale(.medium)
-                                Text("Email 로 로그인 하기")
-                                    .font(.system(size: 20))
-                            }
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.white)
-                            .clipShape(Capsule())
-                        }
-                        
-                        // 비회원 로그인 버튼
-                        Button(action: {
-                            // 비회원 로그인 처리
-                            isLoggedIn = true
-                        }) {
-                            HStack {
-                                Image(systemName: "person.fill")
-                                    .imageScale(.medium)
-                                Text("비회원 로그인")
-                                    .font(.system(size: 20))
-                            }
-                            .foregroundColor(.black) // 버튼 색상
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.white) // 버튼 배경 색상
-                            .clipShape(Capsule())
-                        }
-                       
-                        
-                        // 이용약관 텍스트
-                        VStack(spacing: 4) {
-                            Text("회원가입을 진행하면 다음에 동의 하게 됩니다.")
-                                .font(.system(size: 13))
-                                .foregroundColor(.gray)
-                            
-                            HStack(spacing: 4) {
-                                Text("서비스 이용약관")
-                                    .underline()
-                                Text("&")
-                                Text("개인정보 처리방침")
-                                    .underline()
-                            }
-                            .font(.system(size: 13))
-                            .foregroundColor(.gray)
-                        }
-                        .padding()
                     }
-                    .padding(.horizontal, 100)
-                    .padding()
+                    Spacer()
                 }
             }
         }

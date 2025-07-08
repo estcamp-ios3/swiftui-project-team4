@@ -16,50 +16,49 @@ struct QuizView: View {
     let correctAnswer = "이정후"
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 10) {
-                
-                Text(question)
-                    .font(.title)
-                    .bold()
-                    .multilineTextAlignment(.center)
-                AsyncImage(url: URL(string: "https://file2.nocutnews.co.kr/newsroom/image/2025/04/02/202504021130549262_0.jpg"))
-                
-                ForEach(choices, id: \.self) { choice in
-                    Button(action: {
-                        selectedAnswer = choice
-                        showResult = true
-                    }) {
-                        Text(choice)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                        
-                    }
-                    .disabled(showResult) // 정답 선택 후 버튼 비활성화
-                }
-                
-                if showResult {
-                    if selectedAnswer == correctAnswer {
-                        Text("✅ 정답입니다!")
-                            .foregroundColor(.green)
-                            .bold()
-                    } else {
-                        Text("❌ 오답입니다! 정답은 \(correctAnswer)")
-                            .foregroundColor(.red)
-                            .bold()
-                        
-                        
-                        
+            ScrollView {
+                VStack(spacing: 10) {
+                    
+                    Text(question)
+                        .font(.title)
+                        .bold()
+                        .multilineTextAlignment(.center)
+                    AsyncImage(url: URL(string: "https://file2.nocutnews.co.kr/newsroom/image/2025/04/02/202504021130549262_0.jpg"))
+                    
+                    ForEach(choices, id: \.self) { choice in
+                        Button(action: {
+                            selectedAnswer = choice
+                            showResult = true
+                        }) {
+                            Text(choice)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                            
+                        }
+                        .disabled(showResult) // 정답 선택 후 버튼 비활성화
                     }
                     
+                    if showResult {
+                        if selectedAnswer == correctAnswer {
+                            Text("✅ 정답입니다!")
+                                .foregroundColor(.green)
+                                .bold()
+                        } else {
+                            Text("❌ 오답입니다! 정답은 \(correctAnswer)")
+                                .foregroundColor(.red)
+                                .bold()
+                        }
+                       
+                    }
+                    
+                    
                 }
+                
             }
         }
-            .padding()
-            .animation(.easeInOut, value: showResult)
-            
-        }
     }
+
+           
 
 #Preview {
     QuizView()
