@@ -11,7 +11,7 @@ import SwiftData
 
 struct TeamDetailView: View {
     @Query(sort: \KBOLeagueTeam.id) var selectedTeamQuery: [KBOLeagueTeam]
-    @Query(sort: \Player.name) var players: [Player]
+//    @Query(sort: \Player.name) var players: [Player]
     @Environment(\.modelContext) private var context
 //    @State private var teamPlayers: [Player]
 //    @State private var selectedTeamName: String
@@ -37,14 +37,14 @@ struct TeamDetailView: View {
             List {
                 Section {
                     ScrollView (.horizontal, showsIndicators: false){
-                        HStack {
+                        LazyHStack {
                             ForEach(teamPlayers, id: \.id) { player in
-                                NavigationLink(destination: PlayerDetailView()) {
-                                    VStack {
+                                Link(destination: player.official_page) {
+                                    LazyVStack {
                                         Image("\(player.image ?? "이미지 없음")")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(width: 120, height: 120)
+                                            .frame(width: 130, height: 130)
                                         
                                         Text(player.name)
                                             .font(.headline)
@@ -62,9 +62,9 @@ struct TeamDetailView: View {
                                 }
                             }
                         }
-                        .frame(width: 300, height: 150)
+                        .frame(width: 400, height: 160)
                     }
-                    .padding()
+                    //.padding()
                 } header: {
                     Text("대표선수")
                         .bold()

@@ -55,7 +55,7 @@ struct TeamListView: View {
             let ryu =
                 Player(
                     name: "류현진",
-                    birth: "1987-03-25",
+                    birth: "1987.03.25",
                     height: 186,
                     weight: 108,
                     company: "에이스",
@@ -63,23 +63,141 @@ struct TeamListView: View {
                     number: 99,
                     position: "투수",
                     national_entry: true,
-                    official_page: URL(string: "https://www.example.com/ryu")!,
+                    official_page: URL(string: "http://ryu99corporation.com/")!,
                     image: "ryuhyunjin")
             let nos = Player(
                     name: "노시환",
-                    birth: "2000-12-03",
+                    birth: "2000.12.03",
                     height: 185,
-                    weight: 100,
+                    weight: 96,
                     company: "스타",
                     teamName: "한화 이글스",
                     number: 8,
-                    position: "3루수",
+                    position: "내야수",
                     national_entry: true,
-                    official_page: URL(string: "https://www.example.com/noh")!,
-                    image: "ryuhyunjin")
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/IF/PLIF02.do?&id=475&pcode=69737")!,
+                    image: "nohsihwan")
+            let mdj = Player(
+                    name: "문동주",
+                    birth: "2003.12.23",
+                    height: 188,
+                    weight: 97,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 1,
+                    position: "투수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/PC/PLPC02.do?&id=588&pcode=52701")!,
+                    image: "moondongjoo")
+            let ponce = Player(
+                    name: "폰세",
+                    birth: "1994.04.25",
+                    height: 198,
+                    weight: 115,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 30,
+                    position: "투수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/PC/PLPC02.do?&id=903&pcode=55730")!,
+                    image: "ponce")
+            let ces = Player(
+                    name: "채은성",
+                    birth: "1990.02.06",
+                    height: 186,
+                    weight: 92,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 22,
+                    position: "내야수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/IF/PLIF02.do?&id=744&pcode=79192")!,
+                    image: "chaeeunsung")
+            let cjh = Player(
+                    name: "최재훈",
+                    birth: "1989.08.27",
+                    height: 178,
+                    weight: 94,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 30,
+                    position: "포수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/CC/PLCC02.do?&id=426&pcode=78288")!,
+                    image: "choijaehun")
+            let kimseohyun = Player(
+                    name: "김서현",
+                    birth: "2004.05.31",
+                    height: 188,
+                    weight: 86,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 44,
+                    position: "투수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/PC/PLPC02.do?&id=903&pcode=55730")!,
+                    image: "kimseohyun")
+            let moonhyunbin = Player(
+                    name: "문현빈",
+                    birth: "moonhyunbin",
+                    height: 174,
+                    weight: 82,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 51,
+                    position: "내야수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/PC/PLPC02.do?&id=903&pcode=55730")!,
+                    image: "moonhyunbin")
+            let hwangyoungmuk = Player(
+                    name: "황영묵",
+                    birth: "1999.10.16",
+                    height: 177,
+                    weight: 80,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 95,
+                    position: "내야수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/IF/PLIF02.do?&id=837&pcode=54795")!,
+                    image: "hwangyoungmuk")
+            let leejinyoung = Player(
+                    name: "이진영",
+                    birth: "1997.7.21",
+                    height: 183,
+                    weight: 89,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 10,
+                    position: "외야수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/OF/PLOF02.do?&id=623&pcode=66657")!,
+                    image: "leejinyoung")
+            let liberato = Player(
+                    name: "리베라토",
+                    birth: "1995.12.18",
+                    height: 185,
+                    weight: 79,
+                    company: "스타",
+                    teamName: "한화 이글스",
+                    number: 0,
+                    position: "외야수",
+                    national_entry: false,
+                    official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/OF/PLOF02.do?&id=926&pcode=")!,
+                    image: "liberato")
             
             context.insert(ryu)
             context.insert(nos)
+            context.insert(mdj)
+            context.insert(ponce)
+            context.insert(ces)
+            context.insert(cjh)
+            context.insert(kimseohyun)
+            context.insert(moonhyunbin)
+            context.insert(hwangyoungmuk)
+            context.insert(leejinyoung)
+            context.insert(liberato)
+            
             
             context.insert(KBOLeagueTeam(
                 id: 0,
@@ -94,37 +212,8 @@ struct TeamListView: View {
                 logoImage: "Hanhwa",
                 standings: 1,
                 standingsDesc: "48승 2무 33패",
-                players: [ryu, nos]
+                players: [ryu, nos, mdj, ponce, ces, cjh, kimseohyun, moonhyunbin, hwangyoungmuk, leejinyoung, liberato]
             ))
-
-            let fyu =
-                Player(
-                    name: "류현진",
-                    birth: "1987-03-25",
-                    height: 186,
-                    weight: 108,
-                    company: "에이스",
-                    teamName: "한화 이글스",
-                    number: 99,
-                    position: "투수",
-                    national_entry: true,
-                    official_page: URL(string: "https://www.example.com/ryu")!,
-                    image: "ryuhyunjin")
-            let mos = Player(
-                    name: "노시환",
-                    birth: "2000-12-03",
-                    height: 185,
-                    weight: 100,
-                    company: "스타",
-                    teamName: "한화 이글스",
-                    number: 8,
-                    position: "3루수",
-                    national_entry: true,
-                    official_page: URL(string: "https://www.example.com/noh")!,
-                    image: "ryuhyunjin")
-            
-            context.insert(fyu)
-            context.insert(mos)
 
             context.insert(KBOLeagueTeam(
                 id: 1,

@@ -86,10 +86,10 @@ class Player {
     var image: String?              // 선수사진
     
     var team: KBOLeagueTeam?
-    var seasonRecord: [Record]?   // 시즌기록
+    var seasonRecord: Record?   // 시즌기록
     var totalRecord: Record?      // 통산기록
     
-    init(name: String, birth: String, height: Int, weight: Int, company: String, teamName: String, number: Int, position: String, national_entry: Bool, official_page: URL, image: String?, team: KBOLeagueTeam? = nil, seasonRecord: [Record]? = nil, totalRecord: Record? = nil) {
+    init(name: String, birth: String, height: Int, weight: Int, company: String, teamName: String, number: Int, position: String, national_entry: Bool, official_page: URL, image: String?, team: KBOLeagueTeam? = nil, seasonRecord: Record? = nil, totalRecord: Record? = nil) {
         self.name = name
         self.birth = birth
         self.height = height
