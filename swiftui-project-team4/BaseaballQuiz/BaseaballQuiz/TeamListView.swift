@@ -16,7 +16,7 @@ struct TeamListView: View {
     @Environment(\.modelContext) private var context
     //@State var teamID: Int = 0
     
-    
+    // 구단 리스트
     var body: some View {
         TabView {
             // 첫 번째 탭: 구단정보
