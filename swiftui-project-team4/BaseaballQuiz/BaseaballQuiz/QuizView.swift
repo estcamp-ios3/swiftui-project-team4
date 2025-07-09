@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Observation
 
 // QuizView: 메인 퀴즈 화면 및 탭바 구현
 // 1. TabView 추가하여 퀴즈, 구단정보, 내정보 탭 구현
@@ -14,13 +15,15 @@ import SwiftData
 // 3. SwiftData 모델 컨테이너 연결하여 팀 데이터 관리
 
 struct QuizView: View {
+    // Observable QuizManager 인스턴스 - 퀴즈 정보와 내 정보 간 데이터 공유
+    @State private var quizManager = QuizManager()
     
-    @State private var showResult: Bool = false      // 퀴즈 결과 표시 여부
-    @State private var isCorrect: Bool = false       // 정답 여부
-    @State private var currentQuiz: Quiz?            // 현재 퀴즈 데이터
-    @State private var score: Int = 0                // 총 점수
-    @State private var correctCount: Int = 0         // 맞춘 문제 수
-    @State private var totalQuestionCount: Int = 0   // 전체 문제 수
+    @State private var showResult: Bool = false
+    // 퀴즈 결과 표시 여부
+    @State private var isCorrect: Bool = false
+    // 정답 여부
+    @State private var currentQuiz: Quiz?
+    // 현재 퀴즈 데이터
     
     @State private var isVisible: Bool = true
     @State private var isBlinkingActive: Bool = false
@@ -37,7 +40,7 @@ struct QuizView: View {
                     VStack(spacing: 20) {
                         if let quiz = currentQuiz {
                             HStack {
-                                Text("\(correctCount)" + " / " + "\(totalQuestionCount)")
+                                Text("\(quizManager.correctAnswers)" + " / " + "\(quizManager.totalQuestions)")
                                     .font(.title3)
                                     .foregroundColor(.primary)
                                     .bold()
@@ -51,15 +54,15 @@ struct QuizView: View {
                                     .animation(.easeIn(duration: 0.2), value: isVisible)
                                 
                                 Button("", systemImage: "arrowshape.right.fill") {
+                                    // QuizManager를 통해 퀴즈 결과 업데이트
+                                    quizManager.updateQuizResult(isCorrect: isCorrect)
+                                    
                                     showResult = false
                                     
                                     if isCorrect {
-                                        correctCount += 1
-                                        score += 10
                                         startBlinkingForDuration(duration: 2.0)
                                     }
                                     isCorrect = false
-                                    totalQuestionCount += 1
                                     currentQuiz = quizGenerator.generateRandomQuiz()
                                 }
                                 .font(.title)
@@ -71,7 +74,7 @@ struct QuizView: View {
                                 .cornerRadius(20)
                                 
                                 Spacer()
-                                Text("\(score)")
+                                Text("\(quizManager.totalScore)")
                                     .font(.largeTitle)
                                     .foregroundColor(.primary)
                                     .bold()
@@ -120,13 +123,13 @@ struct QuizView: View {
                                             Text(option)
                                                 .font(.title2)
                                                 .fontWeight(.semibold)
-                                                .foregroundColor(.primary)
+                                                .foregroundColor(showResult ? .gray : .primary)
                                                 .kerning(1)
                                                 .multilineTextAlignment(.center)
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 15)
                                                 .frame(minWidth: 80, idealWidth: 100, maxWidth: 210, minHeight: 45, idealHeight: 45, maxHeight: 50, alignment: .center)
-                                                .background(Color.blue.opacity(0.1))
+                                                .background(showResult ? Color.gray.opacity(0.3) : Color.blue.opacity(0.1))
                                                 .cornerRadius(8)
                                                 .multilineTextAlignment(.center)
                                                 .frame(maxWidth: .infinity, alignment: .center)
@@ -170,8 +173,8 @@ struct QuizView: View {
                                                 .font(.system(size: 60))
                                                 .fontWeight(.bold)
                                                 .frame(width: 80, height: 80)
-                                                .foregroundColor(.green)
-                                                .background(Color.gray.opacity(0.2))
+                                                .foregroundColor(showResult ? .gray : .green)
+                                                .background(showResult ? Color.gray.opacity(0.5) : Color.gray.opacity(0.2))
                                                 .clipShape(Circle())
                                         }
                                         Button(action: {
@@ -182,8 +185,8 @@ struct QuizView: View {
                                                 .font(.system(size: 57))
                                                 .fontWeight(.bold)
                                                 .frame(width: 80, height: 80)
-                                                .foregroundColor(.red)
-                                                .background(Color.gray.opacity(0.2))
+                                                .foregroundColor(showResult ? .gray : .red)
+                                                .background(showResult ? Color.gray.opacity(0.5) : Color.gray.opacity(0.2))
                                                 .clipShape(Circle())
                                         }
                                     }
@@ -238,7 +241,7 @@ struct QuizView: View {
                 }
                 .tag(1)
             
-            MyPage()
+            MyPage(quizManager: quizManager)
                 .tabItem {
                     Label("내 정보", systemImage: "person.crop.circle.fill")
                 }

@@ -21,30 +21,30 @@ struct LoginView: View {
     var body: some View {
         // 조건부 뷰 전환: showQuiz가 true면 QuizView 표시
         Group {
-            if showQuiz {
-                QuizView()
-            } else {
-                ZStack {
-                    // 배경 그라데이션 적용
-                    backgroundGradient
-                        .ignoresSafeArea()
-                    
+        if showQuiz {
+            QuizView()
+        } else {
+            ZStack {
+                // 배경 그라데이션 적용
+                backgroundGradient
+                    .ignoresSafeArea()
+                
                     // 배경 이미지 (반투명 효과)
                     Image("김서현")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
                         .opacity(0.10)
-                        .ignoresSafeArea()
+                    .ignoresSafeArea()
+                
+                VStack {
+                    Spacer()
+                    Spacer()
                     
-                    VStack {
-                        Spacer()
-                        Spacer()
-                        
                         // 앱 타이틀
-                        Text("Hi, KBO Quiz")
+                    Text("Hi, KBO Quiz")
                             .font(.system(size: 40, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        
+                        .foregroundColor(.white)
+                    
                         Spacer()
                         
                         // 퀴즈 시작 버튼
@@ -1565,4 +1565,4 @@ struct LoginView: View {
 // SwiftUI 프리뷰
 #Preview {
     LoginView()
-}
+} 

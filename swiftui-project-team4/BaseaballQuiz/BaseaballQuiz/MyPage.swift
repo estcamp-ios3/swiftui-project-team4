@@ -2,20 +2,15 @@ import SwiftUI
 
 // 사용자의 프로필, 게임 진행 상황, 뱃지, 통계 등을 보여주는 메인 페이지
 struct MyPage: View {
+    // Observable QuizManager 인스턴스 - 퀴즈 정보 실시간 공유
+    let quizManager: QuizManager
+    
     // 사용자의 기본 프로필 정보를 저장하는 상태 변수들
     @State private var nickname = "홈런왕"
     @State private var bio = "KBO를 좋아하는 1인 ⚾️"
     @State private var profileImage = "Doosan"  // 기본 이미지 변경
     @State private var playerPosition = "타자"
     @State private var favoriteTeam = "두산 베어스"
-    
-    // 퀴즈 점수 기록을 저장하는 배열
-    @State private var quizScores = [85, 90, 75, 95, 80]  // 더 현실적인 점수로 변경
-    
-    // 일일 목표와 진행 상황을 추적하는 변수들
-    @State private var dailyGoal = 3
-    @State private var todayGames = 2
-    @State private var currentStreak = 5
     
     // 프로필 편집 화면 표시 여부를 제어하는 상태 변수
     @State private var showingProfileEdit = false
@@ -24,7 +19,7 @@ struct MyPage: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    // 배경을 그라데이션 대신 슬로건 이미지로 변경
+                    // 배경을 슬로건 이미지로 변경
                     ZStack {
                         GeometryReader { geometry in
                             Image("\(profileImage)슬로건")
@@ -80,9 +75,9 @@ struct MyPage: View {
                     VStack(spacing: 20) {
                         // 오늘의 게임 진행 상황과 연속 달성 일수를 표시
                         DailyProgressView(
-                            dailyGoal: dailyGoal,
-                            todayGames: todayGames,
-                            currentStreak: currentStreak
+                            dailyGoal: quizManager.dailyGoal,
+                            todayGames: quizManager.todayQuestions,
+                            currentStreak: 5 // 기본값 유지
                         )
                         .padding(.horizontal)
                         
@@ -109,16 +104,16 @@ struct MyPage: View {
                         .padding(.horizontal)
                         
                         // 사용자의 등급과 진행 상황을 표시
-                        BaseballBadgeView(quizScores: quizScores)
+                        BaseballBadgeView(quizManager: quizManager)
                             .padding(.horizontal)
                         
                         // 게임 통계를 야구 기록 형식으로 표시
-                        BaseballStatsView(quizScores: quizScores)
+                        BaseballStatsView(quizManager: quizManager)
                             .padding(.horizontal)
                         
                         // 프로필 수정 등 주요 액션 버튼
                         HStack(spacing: 15) {
-                            ActionButton(icon: "pencil.circle.fill", title: "프로필 수정", color: .blue) {
+                            ActionButton(icon: "person.fill", title: "프로필 수정", color: .blue) {
                                 showingProfileEdit = true
                             }
                         }
@@ -216,46 +211,58 @@ struct DailyProgressView: View {
 
 // 사용자의 등급과 다음 등급까지의 진행 상황을 표시하는 컴포넌트
 struct BaseballBadgeView: View {
-    let quizScores: [Int]
-    
-    var totalScore: Int {
-        quizScores.reduce(0, +)
-    }
+    let quizManager: QuizManager
     
     var baseballRank: (title: String, emoji: String, description: String, color: Color) {
-        switch totalScore {
-        case 0...100:
-            return ("신인 선수", "🏃‍♂️", "이제 시작이야!", .brown)
-        case 101...200:
-            return ("1군 선수", "⚾️", "실력이 늘고 있어!", .gray)
-        case 201...300:
-            return ("주전 선수", "🏆", "팀의 핵심!", .yellow)
-        case 301...400:
-            return ("올스타", "⭐️", "리그 최고 수준!", .orange)
+        let rank = quizManager.baseballRank
+        switch rank {
+        case "신인":
+            return ("신인", "🏃‍♂️", "야구의 세계에 첫 발을 내딛었다!", .brown)
+        case "주전":
+            return ("주전", "🏆", "팀의 핵심 멤버!", .blue)
+        case "에이스":
+            return ("에이스", "⭐️", "팀을 이끄는 선수!", .orange)
+        case "올스타":
+            return ("올스타", "🌟", "리그 최고 수준!", .yellow)
+        case "레전드":
+            return ("레전드", "👑", "야구계의 전설!", .purple)
         default:
-            return ("명예의 전당", "👑", "전설이 되었다!", .purple)
+            return ("신인", "🏃‍♂️", "야구의 세계에 첫 발을 내딛었다!", .brown)
         }
     }
     
     var nextRankInfo: (threshold: Int, name: String) {
-        switch totalScore {
-        case 0...100:
-            return (101, "1군 선수")
-        case 101...200:
-            return (201, "주전 선수")
-        case 201...300:
-            return (301, "올스타")
-        case 301...400:
-            return (401, "명예의 전당")
+        let score = quizManager.totalScore
+        switch score {
+        case 0...99:
+            return (100, "주전")
+        case 100...199:
+            return (200, "에이스")
+        case 200...299:
+            return (300, "올스타")
+        case 300...499:
+            return (500, "레전드")
         default:
             return (500, "최고 등급")
         }
     }
     
     var progressToNext: Double {
-        let currentThreshold = max(0, nextRankInfo.threshold - 101)
-        let scoreInRange = totalScore % 101
-        return Double(scoreInRange) / Double(currentThreshold > 0 ? 101 : 100)
+        let score = quizManager.totalScore
+        let nextThreshold = nextRankInfo.threshold
+        let previousThreshold: Int
+        
+        switch score {
+        case 0...99: previousThreshold = 0
+        case 100...199: previousThreshold = 100
+        case 200...299: previousThreshold = 200
+        case 300...499: previousThreshold = 300
+        default: return 1.0
+        }
+        
+        let range = nextThreshold - previousThreshold
+        let progress = score - previousThreshold
+        return range > 0 ? Double(progress) / Double(range) : 0
     }
     
     var body: some View {
@@ -301,14 +308,14 @@ struct BaseballBadgeView: View {
                 .cornerRadius(15)
                 
                 // 다음 등급까지 진행률
-                if totalScore < 401 {
+                if quizManager.totalScore < 500 {
                     VStack(spacing: 8) {
                         HStack {
                             Text("다음 등급: \(nextRankInfo.name)")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                             Spacer()
-                            Text("\(nextRankInfo.threshold - totalScore)점 남음")
+                            Text("\(nextRankInfo.threshold - quizManager.totalScore)점 남음")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
@@ -328,25 +335,7 @@ struct BaseballBadgeView: View {
 
 // 게임 통계를 야구 기록 형식으로 표시하는 컴포넌트
 struct BaseballStatsView: View {
-    let quizScores: [Int]
-    
-    var totalScore: Int {
-        quizScores.reduce(0, +)
-    }
-    
-    var averageScore: Double {
-        guard !quizScores.isEmpty else { return 0 }
-        return Double(totalScore) / Double(quizScores.count)
-    }
-    
-    var battingAverage: Double {
-        // 타율을 실제 정답률처럼 계산 (100점 만점 기준)
-        guard !quizScores.isEmpty else { return 0 }
-        let correctAnswers = quizScores.reduce(0.0) { total, score in
-            total + (Double(score) / 100.0)
-        }
-        return correctAnswers / Double(quizScores.count)
-    }
+    let quizManager: QuizManager
     
     var body: some View {
         VStack(spacing: 15) {
@@ -359,9 +348,9 @@ struct BaseballStatsView: View {
             }
             
             HStack(spacing: 20) {
-                StatCard(title: "총 경기", value: "\(quizScores.count)", subtitle: "게임", color: .blue)
-                StatCard(title: "평균 점수", value: String(format: "%.1f", averageScore), subtitle: "점", color: .red)
-                StatCard(title: "정답률", value: String(format: "%.3f", battingAverage), subtitle: "AVG", color: .green)
+                StatCard(title: "총 경기", value: "\(quizManager.totalQuestions)", subtitle: "게임", color: .blue)
+                StatCard(title: "총 점수", value: "\(quizManager.totalScore)", subtitle: "점", color: .red)
+                StatCard(title: "정답률", value: String(format: "%.1f%%", quizManager.accuracyRate), subtitle: "AVG", color: .green)
             }
         }
         .padding()
@@ -551,5 +540,5 @@ struct ActionButton: View {
 }
 
 #Preview {
-    MyPage()
+    MyPage(quizManager: QuizManager())
 }
