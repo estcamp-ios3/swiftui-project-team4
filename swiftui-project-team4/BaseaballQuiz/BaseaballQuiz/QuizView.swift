@@ -220,7 +220,7 @@ struct QuizView: View {
             
             // 두 번째 탭: 구단정보
             TeamListView()
-                .modelContainer(for: KBOLeagueTeam.self, inMemory: true)
+//                .modelContainer(for: KBOLeagueTeam.self, inMemory: true)
                 .tabItem {
                     Label("구단정보", systemImage: "baseball.fill")
                 }

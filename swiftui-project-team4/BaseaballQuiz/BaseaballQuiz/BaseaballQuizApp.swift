@@ -12,6 +12,7 @@ struct BaseaballQuizApp: App {
     var body: some Scene {
         WindowGroup {
             SplashView()
+                .modelContainer(for: [KBOLeagueTeam.self, Player.self], inMemory: true)
         }
     }
 }

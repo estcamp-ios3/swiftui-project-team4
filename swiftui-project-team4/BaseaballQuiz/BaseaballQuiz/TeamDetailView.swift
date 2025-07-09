@@ -62,7 +62,7 @@ struct TeamDetailView: View {
                                 }
                             }
                         }
-                        .frame(width: 400, height: 160)
+                        .frame(height: 160)
                     }
                     //.padding()
                 } header: {
