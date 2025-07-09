@@ -45,7 +45,7 @@ struct QuizView: View {
                                 
                                 Spacer()
                                 Text("     \(quizTypeString(quiz.type))")
-                                    .font(.title)
+                                    .font(.system(size: 25))
                                     .fontWeight(.medium)
                                     .opacity(isBlinkingActive ? (isVisible ? 1.0 : 0.0) : 0.7)
                                     .animation(.easeIn(duration: 0.2), value: isVisible)
@@ -89,7 +89,7 @@ struct QuizView: View {
                             Text(quiz.question)
                                 .font(.title)
                                 .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity)
+                                .frame(maxWidth: 360, alignment: .center)
                             
                             // 이미지 퀴즈인 경우 이미지 표시
                             if let imageUrl = quiz.imageUrl {
@@ -130,8 +130,6 @@ struct QuizView: View {
                                                 .cornerRadius(8)
                                                 .multilineTextAlignment(.center)
                                                 .frame(maxWidth: .infinity, alignment: .center)
-                                            
-                                            
                                         }
                                         .disabled(showResult)
                                     }
@@ -190,6 +188,7 @@ struct QuizView: View {
                                         }
                                     }
                                     .padding(20)
+                                    .disabled(showResult)
                                 }
                                 .padding(.top)
                                 
@@ -214,7 +213,7 @@ struct QuizView: View {
                                     
                                     Text("설명: \(quiz.explanation ?? "설명 없음")")
                                         .font(.title2)
-                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .frame(maxWidth: 300, alignment: .center)
                                         .padding(.top)
                                         .multilineTextAlignment(.center)
                                 }
