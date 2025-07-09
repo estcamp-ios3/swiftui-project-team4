@@ -43,6 +43,12 @@ class QuizGenerator {
              options: ["두산 베어스", "LG 트윈스", "SSG 랜더스", "NC 다이노스"],
              correctAnswer: "LG 트윈스",
              explanation: "서울을 연고로 하는 \n LG 트윈스 로고입니다."),
+        Quiz(type: .imageQuiz,
+             question: "다음은 어떤 구단의 로고일까요?",
+             imageUrl: URL(string: "https://t1.daumcdn.net/media/img-section/sports13/logo/team/1/HH_300300.png")!,
+             options: ["두산 베어스", "LG 트윈스", "SSG 랜더스", "한화 Eagles"],
+             correctAnswer: "한화 Eagles",
+             explanation: "대전을 연고로 하는 \n 한화 Eagles 로고입니다."),
 
         // OX 퀴즈
         Quiz(type: .oxQuiz,
@@ -88,7 +94,19 @@ class QuizGenerator {
              imageUrl: nil,
              options: ["두산 베어스", "SSG 랜더스", "LG 트윈스"],
              correctAnswer: "LG 트윈스",
-             explanation: "2024년 6월까지 \n LA 다저스 소속이었던 \n 엘리저 에르난데스 선수는 LG 트윈스 소속입니다.")
+             explanation: "2024년 6월까지 \n LA 다저스 소속이었던 \n 엘리저 에르난데스 선수는 LG 트윈스 소속입니다."),
+        Quiz(type: .questionQuiz,
+             question: "야구에서 '병살타'는 \n 어떤 상황에서 기록될까요? ",
+             imageUrl: nil,
+             options: ["수비수가 실책을 한 경우", "타자가 헛스윙 삼진", "타구로 인해 두 명의 주자가 아웃", "주자가 베이스를 지나친 경우"],
+             correctAnswer: "타구로 인해 두 명의 주자가 아웃",
+             explanation: "미스 플레이 없이 \n 연속으로 아웃 카운트가 \n 두 개 생기는 경우를 뜻한다"),
+        Quiz(type: .questionQuiz,
+             question: "주자가 1루에 있을떄, \n 타자가 병살타를 치면 몇 명이 아웃 될까요? ",
+             imageUrl: nil,
+             options: ["1 명", "2 명", "3 명", "0 명"],
+             correctAnswer: "2 명",
+             explanation: "미스 플레이 없이 \n 연속으로 아웃 카운트가 \n 두 개 생기는 경우를 뜻한다"),
 
     ]
 
