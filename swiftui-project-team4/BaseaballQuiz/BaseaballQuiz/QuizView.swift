@@ -37,18 +37,26 @@ struct QuizView: View {
                         if let quiz = currentQuiz {
                             HStack {
                                 Text("\(correctCount)" + " / " + "\(totalQuestionCount)")
-                                    .font(.title)
+                                    .font(.largeTitle)
                                     .foregroundColor(.orange)
                                     .bold()
                                     .padding(.leading)
                                     .opacity(0.6)
+                                
                                 Spacer()
-                                Text("점수: \(score)")
+                                Text("점수")
                                     .font(.title)
+                                    .foregroundColor(.blue)
+                                    .bold()
+                                    .opacity(0.6)
+                                    .kerning(1)
+                                Text(": \(score)")
+                                    .font(.largeTitle)
                                     .foregroundColor(.blue)
                                     .bold()
                                     .padding(.trailing)
                                     .opacity(0.6)
+                                    .kerning(1)
                             }
                             
                             // 퀴즈 타입과 질문
@@ -64,11 +72,14 @@ struct QuizView: View {
                                 AsyncImage(url: imageUrl) { image in
                                     image
                                         .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 380, height: 200)
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 340, height: 270)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+
                                 } placeholder: {
                                     ProgressView()
-                                        .frame(width: 380, height: 350)
+                                        .frame(width: 340, height: 300)
+                                    
                                 }
                                 .padding(.bottom)
                             }
@@ -83,31 +94,43 @@ struct QuizView: View {
                                         }) {
                                             Text(option)
                                                 .font(.title3)
+                                                .kerning(2)
+                                                .multilineTextAlignment(.center)
                                                 .padding(.vertical, 8)
                                                 .padding(.horizontal, 15)
                                                 .frame(minWidth: 80, idealWidth: 100, maxWidth: 210, minHeight: 40, idealHeight: 40, maxHeight: 50, alignment: .center)
                                                 .background(Color.blue.opacity(0.1))
                                                 .cornerRadius(8)
+                                                .multilineTextAlignment(.center)
+                                                .frame(maxWidth: .infinity, alignment: .center)
+
+
                                         }
                                         .disabled(showResult)
                                     }
                                     // 결과 표시 (정답/오답)
                                     if showResult {
                                         if isCorrect {
-                                            Text("✅ 정답입니다!")
-                                                .font(.title)
-                                                .foregroundColor(.green)
-                                                .bold()
+                                                Text("✅ 정답입니다!")
+                                                    .font(.title)
+                                                    .foregroundColor(.green)
+                                                    .bold()
+                                                    .frame(maxWidth: .infinity, alignment: .center)
+
                                         } else {
-                                            Text("❌ 오답입니다! 정답은 \(quiz.correctAnswer)")
-                                                .font(.title)
-                                                .foregroundColor(.red)
-                                                .bold()
+                                                Text("❌ 오답입니다! \n 정답 \(quiz.correctAnswer)")
+                                                    .font(.title)
+                                                    .foregroundColor(.red)
+                                                    .bold()
+                                                    .frame(maxWidth: .infinity, alignment: .center)
+
+                                                
                                         }
-                                        
                                         Text("설명: \(quiz.explanation ?? "설명 없음")")
                                             .font(.title2)
+                                            .kerning(2)
                                             .padding(.top)
+                                            .frame(maxWidth: .infinity, alignment: .center)
                                     }
                                 }
                                 // OX 퀴즈 구현
@@ -134,23 +157,31 @@ struct QuizView: View {
                                             .clipShape(Circle())
                                     }
                                 }
+                                
                                 // OX 퀴즈 결과 표시
                                 if showResult {
                                     if isCorrect {
-                                        Text("✅ 정답입니다!")
+                                        Text(" ✅ 정답입니다!")
                                             .font(.title)
                                             .foregroundColor(.green)
                                             .bold()
+                                            .multilineTextAlignment(.center)
+
                                     } else {
-                                        Text("❌ 오답입니다! 정답은 \(quiz.correctAnswer)")
+                                        Text("❌ 오답입니다! \n 정답은 \(quiz.correctAnswer)")
                                             .font(.title)
                                             .foregroundColor(.red)
                                             .bold()
+                                            .multilineTextAlignment(.center)
+
                                     }
                                     
                                     Text("설명: \(quiz.explanation ?? "설명 없음")")
                                         .font(.title2)
+                                        .kerning(2)
                                         .padding(.top)
+                                        .multilineTextAlignment(.center)
+
                                 }
                             }
                         } else {
