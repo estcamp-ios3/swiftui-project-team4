@@ -229,7 +229,7 @@ class QuizGenerator {
              imageUrl: nil,
              options: nil,
              correctAnswer: "O",
-             explanation: " 만루홈런은 타자 본인 포함  4명이 득점하게 됩니다. ")
+             explanation: " 만루홈런은 타자 본인 포함  4명이 득점하게 됩니다. "),
 
         
         // 질문 퀴즈 (선다형)
