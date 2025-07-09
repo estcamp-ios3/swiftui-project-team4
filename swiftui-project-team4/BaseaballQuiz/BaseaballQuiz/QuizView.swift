@@ -118,7 +118,7 @@ struct QuizView: View {
                                                     .frame(maxWidth: .infinity, alignment: .center)
 
                                         } else {
-                                                Text("❌ 오답입니다! \n 정답 \(quiz.correctAnswer)")
+                                                Text("❌ 오답입니다!  정답 \(quiz.correctAnswer)")
                                                     .font(.title)
                                                     .foregroundColor(.red)
                                                     .bold()
@@ -168,7 +168,7 @@ struct QuizView: View {
                                             .multilineTextAlignment(.center)
 
                                     } else {
-                                        Text("❌ 오답입니다! \n 정답은 \(quiz.correctAnswer)")
+                                        Text("❌ 오답입니다!  정답은 \(quiz.correctAnswer)")
                                             .font(.title)
                                             .foregroundColor(.red)
                                             .bold()
