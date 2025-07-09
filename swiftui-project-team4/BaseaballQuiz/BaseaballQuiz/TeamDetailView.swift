@@ -11,10 +11,10 @@ import SwiftData
 
 struct TeamDetailView: View {
     @Query(sort: \KBOLeagueTeam.id) var selectedTeamQuery: [KBOLeagueTeam]
-//    @Query(sort: \Player.name) var players: [Player]
+    //    @Query(sort: \Player.name) var players: [Player]
     @Environment(\.modelContext) private var context
-//    @State private var teamPlayers: [Player]
-//    @State private var selectedTeamName: String
+    //    @State private var teamPlayers: [Player]
+    //    @State private var selectedTeamName: String
     
     var teamID: Int
     var selectedTeam: KBOLeagueTeam? {
@@ -27,7 +27,7 @@ struct TeamDetailView: View {
     
     var body: some View {
         let teamPlayers = selectedTeam?.players ?? []
-
+        
         VStack(alignment: .leading, spacing: 10) {
             Text("   \(selectedTeam?.name ?? "Not Found")")
                 .font(.title)
@@ -51,14 +51,14 @@ struct TeamDetailView: View {
                                             .foregroundColor(.black)
                                             .lineLimit(1)
                                     }
-//                                    AsyncImage(url: player.image) { image in
-//                                        image
-//                                            .resizable()
-//                                            .aspectRatio(contentMode: .fit)
-//                                            .frame(width: 200, height: 200)
-//                                    } placeholder: {
-//                                        ProgressView()
-//                                    }
+                                    //                                    AsyncImage(url: player.image) { image in
+                                    //                                        image
+                                    //                                            .resizable()
+                                    //                                            .aspectRatio(contentMode: .fit)
+                                    //                                            .frame(width: 200, height: 200)
+                                    //                                    } placeholder: {
+                                    //                                        ProgressView()
+                                    //                                    }
                                 }
                             }
                         }
@@ -86,16 +86,16 @@ struct TeamDetailView: View {
                                 Text("홈구장: \(selectedTeam?.homeStadium ?? "Not Found")")
                                 Text("창단일: \(selectedTeam?.birthday ?? "Not Found")")
                                 Text("감독: \(selectedTeam?.manager ?? "Not Found")")
-                                                            }
+                            }
                         }
                     }
                     Text("영문 표기: \(selectedTeam?.engName ?? "Not Found")")
                         .bold()
-
+                    
                     Text("현재 순위: \(selectedTeam?.standings ?? 0)위" + "  /  \(selectedTeam?.standingsDesc ?? "Not Found")")
                         .bold()
                         .foregroundColor(.red)
-
+                    
                     Link("🔗 \(selectedTeam?.name ?? "Not Found") 구단 홈페이지", destination: (selectedTeam?.officialURL ?? URL(string: "https://allstar.koreabaseball.com/"))!)
                         .bold()
                     
@@ -107,36 +107,36 @@ struct TeamDetailView: View {
                 }
             }
             
-//            // team.players가 논-옵셔널 [Player] 타입인 경우:
-//            if !selectedTeamQuery[teamID].players.isEmpty {
-//                Divider()
-//                Text("주요 선수:")
-//                    .font(.headline)
-//                // team.players는 이미 배열이므로 직접 ForEach에 사용
-//                ForEach(selectedTeamQuery[teamID].players) { player in
-//                    Text("- \(player.name) (\(player.position))")
-//                }
-//            } else {
-//                Text("소속 선수 정보 없음.")
-//            }
+            //            // team.players가 논-옵셔널 [Player] 타입인 경우:
+            //            if !selectedTeamQuery[teamID].players.isEmpty {
+            //                Divider()
+            //                Text("주요 선수:")
+            //                    .font(.headline)
+            //                // team.players는 이미 배열이므로 직접 ForEach에 사용
+            //                ForEach(selectedTeamQuery[teamID].players) { player in
+            //                    Text("- \(player.name) (\(player.position))")
+            //                }
+            //            } else {
+            //                Text("소속 선수 정보 없음.")
+            //            }
             
         }
     }
 }
 
 #Preview {
-//    @Previewable @State var selectedPlayer: Player = Player(
-//        name: "류현진",
-//        birth: "1987-03-25",
-//        height: 186,
-//        weight: 108,
-//        company: "에이스",
-//        teamName: "한화 이글스",
-//        number: 99,
-//        position: "투수",
-//        national_entry: true,
-//        official_page: URL(string: "https://www.example.com/ryu")!,)
-//    
+    //    @Previewable @State var selectedPlayer: Player = Player(
+    //        name: "류현진",
+    //        birth: "1987-03-25",
+    //        height: 186,
+    //        weight: 108,
+    //        company: "에이스",
+    //        teamName: "한화 이글스",
+    //        number: 99,
+    //        position: "투수",
+    //        national_entry: true,
+    //        official_page: URL(string: "https://www.example.com/ryu")!,)
+    //
     
     
     @Previewable @State var selectedTeam: KBOLeagueTeam = KBOLeagueTeam(
@@ -156,6 +156,6 @@ struct TeamDetailView: View {
     )
     
     TeamDetailView(teamID: $selectedTeam.id)
-//    TeamDetailView()
+    //    TeamDetailView()
         .modelContainer(for: [KBOLeagueTeam.self, Player.self], inMemory: true)
 }

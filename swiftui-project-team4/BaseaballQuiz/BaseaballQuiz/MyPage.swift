@@ -5,9 +5,9 @@ struct MyPage: View {
     // 사용자의 기본 프로필 정보를 저장하는 상태 변수들
     @State private var nickname = "홈런왕"
     @State private var bio = "KBO를 좋아하는 1인 ⚾️"
-    @State private var profileImage = "⚾️"
+    @State private var profileImage = "Doosan"  // 기본 이미지 변경
     @State private var playerPosition = "타자"
-    @State private var favoriteTeam = "한화 이글스"
+    @State private var favoriteTeam = "두산 베어스"
     
     // 퀴즈 점수 기록을 저장하는 배열
     @State private var quizScores = [85, 90, 75, 95, 80]  // 더 현실적인 점수로 변경
@@ -19,29 +19,32 @@ struct MyPage: View {
     
     // 프로필 편집 화면 표시 여부를 제어하는 상태 변수
     @State private var showingProfileEdit = false
-
+    
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    // 야구장 분위기를 연출하는 그라데이션 배경과 프로필 정보
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            favoriteTeamColor.opacity(0.8), 
-                            favoriteTeamColor.opacity(0.4),
-                            Color.green.opacity(0.3)
-                        ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: 220)
-                    .overlay(
+                    // 배경을 그라데이션 대신 슬로건 이미지로 변경
+                    ZStack {
+                        GeometryReader { geometry in
+                            Image("\(profileImage)슬로건")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: geometry.size.width, height: 220)
+                                .clipped()
+                                .overlay(
+                                    Color.black.opacity(0.3)
+                                )
+                        }
+                        .frame(height: 220)
+                        
                         VStack(spacing: 15) {
-                            // 프로필 이미지 (야구 이모지 또는 포지션)
-                            Text(profileImage)
-                                .font(.system(size: 80))
+                            // 프로필 이미지 (구단 로고)
+                            Image(profileImage)
+                                .resizable()
+                                .scaledToFit()
                                 .frame(width: 120, height: 120)
-                                .background(Color.white)
+                                .background(Color.white.opacity(0.7)) // 로고 백그라운드 투명도 설정
                                 .clipShape(Circle())
                                 .shadow(color: .black.opacity(0.2), radius: 10)
                             
@@ -71,7 +74,8 @@ struct MyPage: View {
                             }
                         }
                         .padding(.top, 20)
-                    )
+                    }
+                    .frame(height: 220)
                     
                     VStack(spacing: 20) {
                         // 오늘의 게임 진행 상황과 연속 달성 일수를 표시
@@ -129,9 +133,9 @@ struct MyPage: View {
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showingProfileEdit) {
                 BaseballProfileEditView(
-                    nickname: $nickname, 
-                    bio: $bio, 
-                    profileImage: $profileImage, 
+                    nickname: $nickname,
+                    bio: $bio,
+                    profileImage: $profileImage,
                     playerPosition: $playerPosition,
                     favoriteTeam: $favoriteTeam
                 )
@@ -405,25 +409,26 @@ struct BaseballProfileEditView: View {
     
     @State private var tempNickname: String = ""
     @State private var tempBio: String = ""
-    @State private var selectedImage: String = "⚾️"
-    @State private var selectedPosition: String = "타자"
-    @State private var selectedTeam: String = "한화 이글스"
+    @State private var selectedImage: String = ""
+    @State private var selectedPosition: String = ""
+    @State private var selectedTeam: String = ""
     
     @Environment(\.dismiss) private var dismiss
     
-    // 야구 관련 이미지들
-    let baseballImages = ["⚾️", "🥎", "🏟", "🥇", "🏆", "⭐️", "🔥", "💪", "👊", "🎯", "⚡️", "🌟"]
+    // 야구 관련 이미지들을 구단 이미지로 변경
+    let baseballImages = ["Doosan", "Hanhwa", "Kia", "Kiwoom", "KT", "LG", "Lotte", "NC", "Samsung", "SSG"]
     let playerPositions = ["타자", "투수", "포수", "내야수", "외야수", "감독", "팬", "해설가"]
     let kboTeams = ["한화 이글스", "KIA 타이거즈", "LG 트윈스", "롯데 자이언츠", "SSG 랜더스", "KT 위즈", "삼성 라이온즈", "NC 다이노스", "두산 베어스", "키움 히어로즈"]
     
     var body: some View {
         NavigationStack {
             Form {
-                Section("프로필 이미지") {
+                Section("최애 구단을 선택하시면 프로필 이미지가 됩니다.") {
                     HStack {
                         Spacer()
-                        Text(selectedImage)
-                            .font(.system(size: 80))
+                        Image(selectedImage)  // Text를 Image로 변경
+                            .resizable()
+                            .scaledToFit()
                             .frame(width: 100, height: 100)
                             .background(Color(.systemGray6))
                             .clipShape(Circle())
@@ -438,8 +443,9 @@ struct BaseballProfileEditView: View {
                                     selectedImage = image
                                 }
                             } label: {
-                                Text(image)
-                                    .font(.system(size: 30))
+                                Image(image)  // Text를 Image로 변경
+                                    .resizable()
+                                    .scaledToFit()
                                     .frame(width: 50, height: 50)
                                     .background(selectedImage == image ? Color.blue.opacity(0.2) : Color(.systemGray6))
                                     .clipShape(Circle())
@@ -524,7 +530,7 @@ struct ActionButton: View {
     let title: String
     let color: Color
     let action: () -> Void
-
+    
     var body: some View {
         Button(action: action) {
             VStack(spacing: 8) {

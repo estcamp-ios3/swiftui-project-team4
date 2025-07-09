@@ -6,77 +6,135 @@
 //
 
 import SwiftUI
+import SwiftData
+
+// QuizView: 메인 퀴즈 화면 및 탭바 구현
+// 1. TabView 추가하여 퀴즈, 구단정보, 내정보 탭 구현
+// 2. 각 탭에 NavigationStack 적용하여 화면 전환 구현
+// 3. SwiftData 모델 컨테이너 연결하여 팀 데이터 관리
 
 struct QuizView: View {
-    @State private var showResult: Bool = false
-    @State private var isCorrect: Bool = false
-    @State private var currentQuiz: Quiz?
-    @State private var score: Int = 0
-    @State private var correctCount: Int = 0
-    @State private var totalQuestionCount: Int = 0
+    // 상태 관리를 위한 프로퍼티
+    @State private var showResult: Bool = false      // 퀴즈 결과 표시 여부
+    @State private var isCorrect: Bool = false       // 정답 여부
+    @State private var currentQuiz: Quiz?            // 현재 퀴즈 데이터
+    @State private var score: Int = 0                // 총 점수
+    @State private var correctCount: Int = 0         // 맞춘 문제 수
+    @State private var totalQuestionCount: Int = 0   // 전체 문제 수
     
+    // 퀴즈 생성기 인스턴스
     private let quizGenerator = QuizGenerator()
     
     var body: some View {
-            ScrollView {
-                VStack(spacing: 20) {
-                    if let quiz = currentQuiz {
-                        HStack {
-                            Text("\(correctCount)" + " / " + "\(totalQuestionCount)")
+        // TabView를 사용하여 하단 탭바 구현
+        TabView {
+            // 첫 번째 탭: 퀴즈 풀기
+            // NavigationStack으로 감싸서 화면 전환 가능하도록 구현
+            NavigationStack {
+                ScrollView {
+                    VStack(spacing: 20) {
+                        // 퀴즈 상단 정보 (맞춘 개수, 점수)
+                        if let quiz = currentQuiz {
+                            HStack {
+                                Text("\(correctCount)" + " / " + "\(totalQuestionCount)")
                                     .font(.title)
                                     .foregroundColor(.orange)
                                     .bold()
                                     .padding(.leading)
                                     .opacity(0.6)
-                            Spacer()
-                            Text("점수: \(score)")
-                                .font(.title)
-                                .foregroundColor(.blue)
-                                .bold()
-                                .padding(.trailing)
-                                .opacity(0.6)
-                        }
-                        
-                        Text("\(quizTypeString(quiz.type))")
-                            .font(.title)
-                            //.padding()
-                                                
-                        Text(quiz.question)
-                            .font(.title2)
-                            .multilineTextAlignment(.center)
-                        
-                        if let imageUrl = quiz.imageUrl {
-                            AsyncImage(url: imageUrl) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 380, height: 200)
-                            } placeholder: {
-                                ProgressView()
-                                    .frame(width: 380, height: 350)
+                                Spacer()
+                                Text("점수: \(score)")
+                                    .font(.title)
+                                    .foregroundColor(.blue)
+                                    .bold()
+                                    .padding(.trailing)
+                                    .opacity(0.6)
                             }
-                            .padding(.bottom)
-                        }
-                        
-                        if let options = quiz.options {
-                            VStack(alignment: .leading, spacing: 10) {
-                                ForEach(options, id: \.self) { option in
+                            
+                            // 퀴즈 타입과 질문
+                            Text("\(quizTypeString(quiz.type))")
+                                .font(.title)
+                            
+                            Text(quiz.question)
+                                .font(.title2)
+                                .multilineTextAlignment(.center)
+                            
+                            // 이미지 퀴즈인 경우 이미지 표시
+                            if let imageUrl = quiz.imageUrl {
+                                AsyncImage(url: imageUrl) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 380, height: 200)
+                                } placeholder: {
+                                    ProgressView()
+                                        .frame(width: 380, height: 350)
+                                }
+                                .padding(.bottom)
+                            }
+                            
+                            // 객관식 퀴즈 구현
+                            if let options = quiz.options {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    ForEach(options, id: \.self) { option in
+                                        Button(action: {
+                                            isCorrect = (option == quiz.correctAnswer ? true : false)
+                                            showResult = true
+                                        }) {
+                                            Text(option)
+                                                .font(.title3)
+                                                .padding(.vertical, 8)
+                                                .padding(.horizontal, 15)
+                                                .frame(minWidth: 80, idealWidth: 100, maxWidth: 210, minHeight: 40, idealHeight: 40, maxHeight: 50, alignment: .center)
+                                                .background(Color.blue.opacity(0.1))
+                                                .cornerRadius(8)
+                                        }
+                                        .disabled(showResult)
+                                    }
+                                    // 결과 표시 (정답/오답)
+                                    if showResult {
+                                        if isCorrect {
+                                            Text("✅ 정답입니다!")
+                                                .font(.title)
+                                                .foregroundColor(.green)
+                                                .bold()
+                                        } else {
+                                            Text("❌ 오답입니다! 정답은 \(quiz.correctAnswer)")
+                                                .font(.title)
+                                                .foregroundColor(.red)
+                                                .bold()
+                                        }
+                                        
+                                        Text("설명: \(quiz.explanation ?? "설명 없음")")
+                                            .font(.title2)
+                                            .padding(.top)
+                                    }
+                                }
+                                // OX 퀴즈 구현
+                            } else if quiz.type == .oxQuiz {
+                                HStack(spacing: 20) {
                                     Button(action: {
-                                        isCorrect = (option == quiz.correctAnswer ? true : false)
-                                        // 디버깅용
-                                        //print("선택: \(option), 정답: \(quiz.correctAnswer)")
+                                        isCorrect = (quiz.correctAnswer == "O" ? true : false)
                                         showResult = true
                                     }) {
-                                        Text(option)
-                                            .font(.title3)
-                                            .padding(.vertical, 8)
-                                            .padding(.horizontal, 15)
-                                            .frame(minWidth: 80, idealWidth: 100, maxWidth: 210, minHeight: 40, idealHeight: 40, maxHeight: 50, alignment: .center)
-                                            .background(Color.blue.opacity(0.1))
-                                            .cornerRadius(8)
+                                        Text("O")
+                                            .font(.largeTitle)
+                                            .frame(width: 80, height: 80)
+                                            .background(Color.green.opacity(0.2))
+                                            .clipShape(Circle())
                                     }
-                                    .disabled(showResult)
+                                    Button(action: {
+                                        isCorrect = (quiz.correctAnswer == "X" ? true : false)
+                                        showResult = true
+                                    }) {
+                                        Text("X")
+                                            .font(.largeTitle)
+                                            .frame(width: 80, height: 80)
+                                            .background(Color.red.opacity(0.2))
+                                            .clipShape(Circle())
+                                    }
                                 }
+                                // OX 퀴즈 결과 표시
                                 if showResult {
                                     if isCorrect {
                                         Text("✅ 정답입니다!")
@@ -95,77 +153,58 @@ struct QuizView: View {
                                         .padding(.top)
                                 }
                             }
-                        } else if quiz.type == .oxQuiz {
-                            HStack(spacing: 20) {
-                                Button(action: {
-                                    isCorrect = (quiz.correctAnswer == "O" ? true : false)
-                                    showResult = true
-                                }) {
-                                    Text("O")
-                                        .font(.largeTitle)
-                                        .frame(width: 80, height: 80)
-                                        .background(Color.green.opacity(0.2))
-                                        .clipShape(Circle())
-                                }
-                                Button(action: {
-                                    isCorrect = (quiz.correctAnswer == "X" ? true : false)
-                                    showResult = true
-                                }) {
-                                    Text("X")
-                                        .font(.largeTitle)
-                                        .frame(width: 80, height: 80)
-                                        .background(Color.red.opacity(0.2))
-                                        .clipShape(Circle())
-                                }
-                            }
-                            if showResult {
-                                if isCorrect {
-                                    Text("✅ 정답입니다!")
-                                        .font(.title)
-                                        .foregroundColor(.green)
-                                        .bold()
-                                } else {
-                                    Text("❌ 오답입니다! 정답은 \(quiz.correctAnswer)")
-                                        .font(.title)
-                                        .foregroundColor(.red)
-                                        .bold()
-                                }
-                                
-                                Text("설명: \(quiz.explanation ?? "설명 없음")")
-                                    .font(.title2)
-                                    .padding(.top)
-                            }
-                        }
-                    } else {
-                        Text("퀴즈를 더 이상 로드할 수 없습니다. 돈을 내세요!!")
-                    }
-                    
-                    Button("다음 퀴즈", systemImage: "arrowshape.right.circle") {
-                        showResult = false
-                        if isCorrect {
-                            correctCount += 1
-                            score += 10
+                        } else {
+                            Text("퀴즈를 더 이상 로드할 수 없습니다. 돈을 내세요!!")
                         }
                         
-                        totalQuestionCount += 1
+                        // 다음 퀴즈 버튼
+                        Button("다음 퀴즈", systemImage: "arrowshape.right.circle") {
+                            showResult = false
+                            if isCorrect {
+                                correctCount += 1
+                                score += 10
+                            }
+                            
+                            totalQuestionCount += 1
+                            currentQuiz = quizGenerator.generateRandomQuiz()
+                        }
+                        .font(.title)
+                        .fontWeight(.medium)
+                        .frame(width: 180, height: 40)
+                        .padding()
+                        .background(.black.opacity(0.65))
+                        .foregroundColor(.white)
+                        .cornerRadius(15)
+                    }
+                    .onAppear {
                         currentQuiz = quizGenerator.generateRandomQuiz()
                     }
-                    .font(.title)
-                    .fontWeight(.medium)
-                    .frame(width: 180, height: 40)
-                    .padding()
-                    .background(.black.opacity(0.65))
-                    .foregroundColor(.white)
-                    .cornerRadius(15)
                 }
-                .onAppear {
-                    currentQuiz = quizGenerator.generateRandomQuiz()
-                }
-                //.animation(.easeInOut, value: isCorrect)
-            }
 
+            }
+            .tabItem {
+                Label("퀴즈풀기", systemImage: "figure.baseball")
+            }
+            .tag(0)
+            
+            // 두 번째 탭: 구단정보
+            TeamListView()
+                .modelContainer(for: KBOLeagueTeam.self, inMemory: true)
+                .tabItem {
+                    Label("구단정보", systemImage: "baseball.fill")
+                }
+                .tag(1)
+            
+            // 세 번째 탭: 내 정보
+            MyPage()
+                .tabItem {
+                    Label("내 정보", systemImage: "person.crop.circle.fill")
+                }
+                .tag(2)
+        }
     }
     
+    // 퀴즈 타입에 따른 문자열 반환 함수
     private func quizTypeString(_ type: QuizType) -> String {
         switch type {
         case .imageQuiz: return "이미지 퀴즈"
@@ -175,6 +214,7 @@ struct QuizView: View {
     }
 }
 
+// SwiftUI 프리뷰
 #Preview {
     QuizView()
 }
