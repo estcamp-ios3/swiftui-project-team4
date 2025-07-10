@@ -171,7 +171,7 @@ struct LoginView: View {
                 number: 44,
                 position: "투수",
                 national_entry: false,
-                official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/PC/PLPC02.do?&id=903&pcode=55730")!,
+                official_page: URL(string: "https://www.hanwhaeagles.co.kr/PL/PC/PLPC02.do?&id=726&pcode=53754")!,
                 image: "kimseohyun")
             let moonhyunbin = Player(
                 name: "문현빈",
